@@ -4,9 +4,14 @@ const jenkinsNS = storage.jenkinsNamespace();
 const logging = jenkinsNS.subspace('logging');
 const categories = logging.subspace('categories');
 
+//
 // Make sure the console log functions are supported in the environment.
+//
 if (!console.debug) {
     console.debug = console.log;
+}
+if (!console.info) {
+    console.info = console.log;
 }
 if (!console.warn) {
     console.warn = console.log;
@@ -18,7 +23,7 @@ if (!console.error) {
 /**
  * Log Level enum.
  * <p>
- * Defines simple logging levels i.e. {@link Level.DEBUG}, {@link Level.INFO}, {@link Level.WARN}, {@link Level.ERROR}.
+ * Defines simple logging levels i.e. {@link Level.DEBUG}, {@link Level.LOG}, {@link Level.INFO}, {@link Level.WARN}, {@link Level.ERROR}.
  * <p>
  * Do not construct this class; just use the above listed static property enums.
  * @constructor
@@ -28,21 +33,25 @@ function Level() {
     throw new Error('Unexpected construction of the Level class. Please use the static property enums i.e. Level.DEBUG etc.');
 }
 /**
- * Debug log level.
+ * Debug log level (console.debug).
  */
 Level.DEBUG = { id: 'DEBUG', precedence: 0 };
 /**
- * Info log level.
+ * Log log level (console.log).
  */
-Level.INFO = { id: 'INFO', precedence: 1};
+Level.LOG = { id: 'LOG', precedence: 1 };
 /**
- * Warn log level.
+ * Info log level (console.info).
  */
-Level.WARN = { id: 'WARN', precedence: 2 };
+Level.INFO = { id: 'INFO', precedence: 2 };
 /**
- * Error log level.
+ * Warn log level (console.warn).
  */
-Level.ERROR = { id: 'ERROR', precedence: 3 };
+Level.WARN = { id: 'WARN', precedence: 3 };
+/**
+ * Error log level (console.error).
+ */
+Level.ERROR = { id: 'ERROR', precedence: 4 };
 
 exports.Level = Level;
 
@@ -63,7 +72,7 @@ exports.getCategoriesStorageNS = function() {
  * @param {Level} level The logging level for the category.
  */
 exports.setLogLevel = function(category, level) {
-    if (level !== Level.ERROR && level !== Level.WARN && level !== Level.INFO && level !== Level.DEBUG) {
+    if (level !== Level.ERROR && level !== Level.WARN && level !== Level.INFO && level !== Level.LOG && level !== Level.DEBUG) {
         throw new Error('Unexpected arg type for "level". Expected one of the predefined Level enums.');
     }
     categories.set(category, level.id);
@@ -128,6 +137,20 @@ Logger.prototype = {
     },
 
     /**
+     * Is the {@link Level#LOG Level.LOG} logging level enabled for this logger instance.
+     * <p>
+     * Shorthand for <code>logger.isEnabled(Level.LOG)</code>.
+     * @returns {boolean} True if the level is enabled, otherwiser false.
+     * @example
+     * if (logger.isLogEnabled()) {
+     *     logger.log('Log a message for x and y values: ', x , y);
+     * }
+     */
+    isLogEnabled: function () {
+        return this.isEnabled(Level.LOG);
+    },
+
+    /**
      * Is the {@link Level#INFO Level.INFO} logging level enabled for this logger instance.
      * <p>
      * Shorthand for <code>logger.isEnabled(Level.INFO)</code>.
@@ -161,7 +184,17 @@ Logger.prototype = {
      */
     debug: function (message) {
         if (this.isEnabled(Level.DEBUG)) {
-            console.debug.apply(console, [this.category].concat(arguments));
+            console.debug.apply(console.debug, logArgs(Level.DEBUG, this.category, arguments));
+        }
+    },
+
+    /**
+     * Log an "log" level message.
+     * @param {...*} message Message arguments.
+     */
+    log: function (message) {
+        if (this.isEnabled(Level.LOG)) {
+            console.log.apply(console.log, logArgs(Level.LOG, this.category, arguments));
         }
     },
 
@@ -171,7 +204,7 @@ Logger.prototype = {
      */
     info: function (message) {
         if (this.isEnabled(Level.INFO)) {
-            console.log.apply(console, [this.category].concat(arguments));
+            console.info.apply(console.info, logArgs(Level.INFO, this.category, arguments));
         }
     },
 
@@ -181,7 +214,7 @@ Logger.prototype = {
      */
     warn: function (message) {
         if (this.isEnabled(Level.WARN)) {
-            console.warn.apply(console, [this.category].concat(arguments));
+            console.warn.apply(console.warn, logArgs(Level.WARN, this.category, arguments));
         }
     },
 
@@ -191,9 +224,39 @@ Logger.prototype = {
      */
     error: function (message) {
         // Error messages are always logged. No need to check.
-        console.error.apply(console, [this.category].concat(arguments));
+        console.error.apply(console.error, logArgs(Level.ERROR, this.category, arguments));
     }
 };
+
+function logArgs(level, category, callArgs) {
+    if (!callArgs || callArgs.length === 0) {
+        return callArgs;
+    }
+
+    // Make an array copy of the callArgs - it's not
+    // a real array (it's "array-like").
+    const callArgsCopy = [];
+    for (var i = 0; i < callArgs.length; i++) {
+        callArgsCopy.push(callArgs[i]);
+    }
+
+    // Create the message prefix, concatenating the log info with
+    // the first string arg. This will allow formatted log strings
+    // to still work.
+    var prefix = '[' + level.id + ' - ' + category + '] ';
+    if (typeof callArgsCopy[0] === 'string') {
+        prefix += callArgsCopy.shift();
+    }
+
+    // Put them all back on the "array-like" args object
+    // and return it.
+    callArgs[0] = prefix;
+    for (var ii = 0; ii < callArgsCopy.length; ii++) {
+        callArgs[ii + 1] = callArgsCopy[ii];
+    }
+
+    return callArgs;
+}
 
 /**
  * Create a {Logger} instance for the specified category.

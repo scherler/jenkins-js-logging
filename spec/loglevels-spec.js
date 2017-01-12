@@ -10,9 +10,24 @@ describe("Logging level config tests", function() {
     it("explicit log level", function() {
         // Set the logging level for the category.
         logging.setLogLevel('a.b.c', logging.Level.DEBUG);
-
-        const logger = logging.logger('a.b.c');
+        var logger = logging.logger('a.b.c');
         expect(logger.logLevel).toBe(logging.Level.DEBUG);
+
+        logging.setLogLevel('a.b.c', logging.Level.LOG);
+        logger = logging.logger('a.b.c');
+        expect(logger.logLevel).toBe(logging.Level.LOG);
+
+        logging.setLogLevel('a.b.c', logging.Level.INFO);
+        logger = logging.logger('a.b.c');
+        expect(logger.logLevel).toBe(logging.Level.INFO);
+
+        logging.setLogLevel('a.b.c', logging.Level.WARN);
+        logger = logging.logger('a.b.c');
+        expect(logger.logLevel).toBe(logging.Level.WARN);
+
+        logging.setLogLevel('a.b.c', logging.Level.ERROR);
+        logger = logging.logger('a.b.c');
+        expect(logger.logLevel).toBe(logging.Level.ERROR);
     });
 
     it("inherited log level", function() {
@@ -69,13 +84,16 @@ describe("Logging level config tests", function() {
 
         // everything should get logged to the "abc" logger
         mockConsole = newMockConsole();
-        abc.debug('message');
-        abc.info('message');
-        abc.warn('message');
-        abc.error('message');
+        abc.debug('d-message', 1);
+        abc.info('i-message');
+        abc.warn('d-message');
+        abc.error('e-message');
         expect(mockConsole.logs.length).toBe(4);
         expect(mockConsole.logs[0].level).toBe('debug');
-        expect(mockConsole.logs[1].level).toBe('log');
+        expect(mockConsole.logs[0].arguments[0]).toBe('[DEBUG - a.b.c] d-message');
+        expect(mockConsole.logs[0].arguments[1]).toBe(1);
+        expect(mockConsole.logs[1].level).toBe('info');
+        expect(mockConsole.logs[1].arguments[0]).toBe('[INFO - a.b.c] i-message');
         expect(mockConsole.logs[2].level).toBe('warn');
         expect(mockConsole.logs[3].level).toBe('error');
 
@@ -86,7 +104,7 @@ describe("Logging level config tests", function() {
         abd.warn('message');
         abd.error('message');
         expect(mockConsole.logs.length).toBe(3);
-        expect(mockConsole.logs[0].level).toBe('log');
+        expect(mockConsole.logs[0].level).toBe('info');
         expect(mockConsole.logs[1].level).toBe('warn');
         expect(mockConsole.logs[2].level).toBe('error');
 
@@ -120,6 +138,9 @@ function newMockConsole() {
         log: function () {
             mockConsole.logs.push({level: 'log', arguments: arguments});
         },
+        info: function () {
+            mockConsole.logs.push({level: 'info', arguments: arguments});
+        },
         warn: function () {
             mockConsole.logs.push({level: 'warn', arguments: arguments});
         },
@@ -129,6 +150,7 @@ function newMockConsole() {
     };
     console.debug = mockConsole.debug;
     console.log = mockConsole.log;
+    console.info = mockConsole.info;
     console.warn = mockConsole.warn;
     console.error = mockConsole.error;
     return mockConsole;
