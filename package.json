@@ -10,6 +10,10 @@
   },
   "author": "Tom Fennelly <tom.fennelly@gmail.com> (https://github.com/tfennelly)",
   "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/tfennelly/jenkins-js-logging"
+  },
   "dependencies": {
     "@jenkins-cd/storage": "0.0.4"
   },
