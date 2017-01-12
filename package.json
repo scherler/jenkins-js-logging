@@ -1,8 +1,9 @@
 {
   "name": "@jenkins-cd/logging",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "description": "Jenkins client-side logging",
   "main": "index.js",
+  "files": ["LICENSE.txt", "index.js"],
   "scripts": {
     "test": "jasmine spec/*.js",
     "jsdoc": "jsdoc -d jsdoc index.js JSDOC.md"
