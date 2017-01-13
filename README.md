@@ -8,6 +8,10 @@ Client-side Logging APIs for Jenkins.
 npm install --save @jenkins-cd/logging
 ```
 
-## Documentation
+## API Documentation
 
 See [API Documentation](https://tfennelly.github.io/jenkins-js-logging/).
+
+## Browser Configuration
+
+All `ERROR` logs are printed to the browser console by default. All other log configurations needs to be done through the Browser Developer Tools. For more on that, [see the following documentation](/index.html#browser-config).

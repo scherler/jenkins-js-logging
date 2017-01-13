@@ -6,7 +6,7 @@
   "files": ["LICENSE.txt", "index.js"],
   "scripts": {
     "test": "jasmine spec/*.js",
-    "jsdoc": "jsdoc -d jsdoc index.js JSDOC.md"
+    "jsdoc": "jsdoc -d jsdoc index.js JSDOC.md && mkdir -p jsdoc/images && cp images/* jsdoc/images"
   },
   "author": "Tom Fennelly <tom.fennelly@gmail.com> (https://github.com/tfennelly)",
   "license": "MIT",

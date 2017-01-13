@@ -184,7 +184,7 @@ Logger.prototype = {
      */
     debug: function (message) {
         if (this.isEnabled(Level.DEBUG)) {
-            console.debug.apply(console.debug, logArgs(Level.DEBUG, this.category, arguments));
+            console.debug.apply(console, logArgs(Level.DEBUG, this.category, arguments));
         }
     },
 
@@ -194,7 +194,7 @@ Logger.prototype = {
      */
     log: function (message) {
         if (this.isEnabled(Level.LOG)) {
-            console.log.apply(console.log, logArgs(Level.LOG, this.category, arguments));
+            console.log.apply(console, logArgs(Level.LOG, this.category, arguments));
         }
     },
 
@@ -204,7 +204,7 @@ Logger.prototype = {
      */
     info: function (message) {
         if (this.isEnabled(Level.INFO)) {
-            console.info.apply(console.info, logArgs(Level.INFO, this.category, arguments));
+            console.info.apply(console, logArgs(Level.INFO, this.category, arguments));
         }
     },
 
@@ -214,7 +214,7 @@ Logger.prototype = {
      */
     warn: function (message) {
         if (this.isEnabled(Level.WARN)) {
-            console.warn.apply(console.warn, logArgs(Level.WARN, this.category, arguments));
+            console.warn.apply(console, logArgs(Level.WARN, this.category, arguments));
         }
     },
 
@@ -224,7 +224,7 @@ Logger.prototype = {
      */
     error: function (message) {
         // Error messages are always logged. No need to check.
-        console.error.apply(console.error, logArgs(Level.ERROR, this.category, arguments));
+        console.error.apply(console, logArgs(Level.ERROR, this.category, arguments));
     }
 };
 
