@@ -15,7 +15,7 @@
     "url": "https://github.com/tfennelly/jenkins-js-logging"
   },
   "dependencies": {
-    "@jenkins-cd/storage": "^0.0.4"
+    "@jenkins-cd/storage": "^0.0.5"
   },
   "devDependencies": {
     "jasmine": "^2.5.2",

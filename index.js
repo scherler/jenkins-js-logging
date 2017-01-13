@@ -20,6 +20,9 @@ if (!console.error) {
     console.error = console.log;
 }
 
+// Output an info log with a hyperlink to the docs
+console.info('Browser configuration of @jenkins-cd/logging is explained at https://tfennelly.github.io/jenkins-js-logging/index.html#browser-config');
+
 /**
  * Log Level enum.
  * <p>
@@ -54,6 +57,8 @@ Level.WARN = { id: 'WARN', precedence: 3 };
 Level.ERROR = { id: 'ERROR', precedence: 4 };
 
 exports.Level = Level;
+
+const LEVEL_PARENTDOTCHECK_CONSTRAINTS = [Level.DEBUG.id, Level.LOG.id, Level.INFO.id, Level.WARN.id, Level.ERROR.id];
 
 /**
  * Get the categories {StorageNamespace}.
@@ -96,15 +101,28 @@ function Logger(category) {
     }
     this.category = category;
 
-    const logLevelId = categories.get(category, {checkDotParent: true});
-    this.logLevel = Level[logLevelId];
-    // If there's no log level set for the category, or it's set to some
-    // spurious value, then default it to 'ERROR' and store it.
-    if (!logLevelId || !Level[logLevelId]) {
-        this.logLevel = Level.ERROR;
-        categories.set(category, Level.ERROR.id);
-    } else {
-        this.logLevel = Level[logLevelId];
+    function stringToLogLevel(logLevelId) {
+        if (!logLevelId || logLevelId === '_') {
+            return undefined;
+        }
+        return Level[logLevelId];
+    }
+
+    // Look for an exact matching category. If not configured, set it to a blank value
+    // so as to make it discoverable in the browsers Storage Inspector.
+    var logLevelId = categories.get(category);
+    if (logLevelId === undefined) {
+        categories.set(category, '_');
+    }
+
+    this.logLevel = stringToLogLevel(logLevelId);
+    if (!this.logLevel) {
+        logLevelId = categories.get(category, {checkDotParent: LEVEL_PARENTDOTCHECK_CONSTRAINTS});
+        this.logLevel = stringToLogLevel(logLevelId);
+        if (!this.logLevel) {
+            // Default
+            this.logLevel = Level.ERROR;
+        }
     }
 }
 Logger.prototype = {

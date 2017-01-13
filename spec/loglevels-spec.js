@@ -36,9 +36,32 @@ describe("Logging level config tests", function() {
         logging.setLogLevel('a.b', logging.Level.INFO);
         logging.setLogLevel('a.b.c', logging.Level.DEBUG);
 
-        expect(logging.logger('a.b.c').logLevel).toBe(logging.Level.DEBUG); // from 'a.b.c'
-        expect(logging.logger('a.b.d').logLevel).toBe(logging.Level.INFO); // from 'a.b'
-        expect(logging.logger('a.x.a').logLevel).toBe(logging.Level.WARN); // from 'a'
+        const categoriesNS = logging.getCategoriesStorageNS();
+
+        // Check that there's nothing for 'a.b.d' and 'a.x.a'
+        // in the storaqe. See below for what's expected once
+        // the logger instance is created.
+        expect(categoriesNS.get('a.b.d')).not.toBeDefined();
+        expect(categoriesNS.get('a.x.a')).not.toBeDefined();
+
+        // Create the logger instances
+        var abc = logging.logger('a.b.c');
+        var abd = logging.logger('a.b.d');
+        var axa = logging.logger('a.x.a');
+
+        // Check storage again now that the logger instances are created (above).
+        // The storage should now have blank values for the missing categories,
+        // but the associated logger instances should have inherited their
+        // log levels from a dot parent. The blank values are so as to make
+        // the log levels discoverable in the browser.
+        expect(categoriesNS.get('a.b.d')).toBe('_');
+        expect(categoriesNS.get('a.x.a')).toBe('_');
+
+        // check that the actual logLevels are inherited
+        expect(abc.logLevel).toBe(logging.Level.DEBUG); // from 'a.b.c'
+        expect(abd.logLevel).toBe(logging.Level.INFO); // inherited from 'a.b'
+        expect(axa.logLevel).toBe(logging.Level.WARN); // inherited from 'a'
+
     });
 
     it("inherited log level", function() {
