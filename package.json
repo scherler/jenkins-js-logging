@@ -1,6 +1,6 @@
 {
   "name": "@jenkins-cd/logging",
-  "version": "0.0.3",
+  "version": "0.0.4",
   "description": "Jenkins client-side logging",
   "main": "index.js",
   "files": ["LICENSE.txt", "index.js"],
