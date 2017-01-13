@@ -14,4 +14,4 @@ See [API Documentation](https://tfennelly.github.io/jenkins-js-logging/).
 
 ## Browser Configuration
 
-All `ERROR` logs are printed to the browser console by default. All other log configurations needs to be done through the Browser Developer Tools. For more on that, [see the following documentation](/index.html#browser-config).
+All `ERROR` logs are printed to the browser console by default. All other log configurations needs to be done through the Browser Developer Tools. For more on that, [see the following documentation](https://tfennelly.github.io/jenkins-js-logging/index.html#browser-config).
