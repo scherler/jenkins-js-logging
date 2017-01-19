@@ -1,8 +1,8 @@
 // See https://github.com/jenkinsci/js-storage
-const storage = require('@jenkins-cd/storage');
-const jenkinsNS = storage.jenkinsNamespace();
-const logging = jenkinsNS.subspace('logging');
-const categories = logging.subspace('categories');
+var storage = require('@jenkins-cd/storage');
+var jenkinsNS = storage.jenkinsNamespace();
+var logging = jenkinsNS.subspace('logging');
+var categories = logging.subspace('categories');
 
 //
 // Make sure the console log functions are supported in the environment.
@@ -58,7 +58,7 @@ Level.ERROR = { id: 'ERROR', precedence: 4 };
 
 exports.Level = Level;
 
-const LEVEL_PARENTDOTCHECK_CONSTRAINTS = [Level.DEBUG.id, Level.LOG.id, Level.INFO.id, Level.WARN.id, Level.ERROR.id];
+var LEVEL_PARENTDOTCHECK_CONSTRAINTS = [Level.DEBUG.id, Level.LOG.id, Level.INFO.id, Level.WARN.id, Level.ERROR.id];
 
 /**
  * Get the categories {StorageNamespace}.
@@ -253,7 +253,7 @@ function logArgs(level, category, callArgs) {
 
     // Make an array copy of the callArgs - it's not
     // a real array (it's "array-like").
-    const callArgsCopy = [];
+    var callArgsCopy = [];
     for (var i = 0; i < callArgs.length; i++) {
         callArgsCopy.push(callArgs[i]);
     }
