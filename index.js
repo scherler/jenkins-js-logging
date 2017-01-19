@@ -1,4 +1,4 @@
-// See https://tfennelly.github.io/jenkins-js-storage
+// See https://github.com/jenkinsci/js-storage
 const storage = require('@jenkins-cd/storage');
 const jenkinsNS = storage.jenkinsNamespace();
 const logging = jenkinsNS.subspace('logging');
@@ -64,7 +64,7 @@ const LEVEL_PARENTDOTCHECK_CONSTRAINTS = [Level.DEBUG.id, Level.LOG.id, Level.IN
  * Get the categories {StorageNamespace}.
  * <p>
  * External entities should not directly store anything in this namespace.
- * @returns {StorageNamespace} See https://tfennelly.github.io/jenkins-js-storage/.
+ * @returns {StorageNamespace} See https://github.com/jenkinsci/js-storage.
  * @see <a href="./global.html#setLogLevel">setLogLevel</a>.
  */
 exports.getCategoriesStorageNS = function() {
