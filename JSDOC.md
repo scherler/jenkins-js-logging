@@ -50,15 +50,17 @@ This function is intended for use by browser tooling (e.g. Chrome Developer Exte
 
 # Browser Configuration
 
-We might, at some time in the future, create Developer tool Extensions for one or more browsers, making it easy to discover and configure log levels. In the meantime however, you need to be able to discover and configure them yourself.
-
-This logging package uses browser [`localStorage`](https://developer.mozilla.org/en/docs/Web/API/Window/localStorage) for storing log settings. So while of course it's possible to use the Developer Console in any browser to set log levels via the [Storage API](https://developer.mozilla.org/en-US/docs/Web/API/Storage), it actually turns out that most browsers have a "Storage Inspector" within their Developer tools, making it very easy to find and configure logging levels without having to write instructions into a Browser Dev Console.  
+This logging package uses browser [`localStorage`](https://developer.mozilla.org/en/docs/Web/API/Window/localStorage) for storing log settings. __We have a Developer tool Extension for the Google Chrome browser__ (see below), making it easy to discover and configure log levels in Chrome. For other browser (see below also), you need to use their "Storage Inspector" to discover and configure the log levels. Of course, it's also possible to use the Developer Console in any browser to programmatically set log levels via the [Storage API](https://developer.mozilla.org/en-US/docs/Web/API/Storage).
 
 Configuring log levels in the Storage Inspector of any of the Browsers is a simple process of locating the key for the log category of interest (all log category keys have a "`jenkins-instance/logging/categories:`" prefix) and changing it's value to the desired [Level] i.e. `DEBUG`, `LOG`, `INFO`, `WARN`, `ERROR`. See the following sections for specific examples. 
 
 ## Google Chrome
 
-The following image shows Google Chrome's Storage inspector. 
+The easiest way to configure logging levels in Google Chrome is via the [Jenkins Logging Chrome Devtools Extension](https://github.com/tfennelly/jenkins-logging-chrome-ext). Once installed, a new "Jenkins Logging" tab will be added to the Developer Tools. 
+
+![chrome-config](./images/chrome-extension.png)
+
+Of course, it's also possible use Google Chrome's Storage inspector. 
 
 ![chrome-config](./images/chrome-config.png)
 
