@@ -50,7 +50,7 @@ This function is intended for use by browser tooling (e.g. Chrome Developer Exte
 
 # Browser Configuration
 
-This logging package uses browser [`localStorage`](https://developer.mozilla.org/en/docs/Web/API/Window/localStorage) for storing log settings. __We have a Developer tool Extension for the Google Chrome browser__ (see below), making it easy to discover and configure log levels in Chrome. For other browser (see below also), you need to use their "Storage Inspector" to discover and configure the log levels. Of course, it's also possible to use the Developer Console in any browser to programmatically set log levels via the [Storage API](https://developer.mozilla.org/en-US/docs/Web/API/Storage).
+This logging package uses browser [`localStorage`](https://developer.mozilla.org/en/docs/Web/API/Window/localStorage) for storing log settings. __We have a Developer tool Extension for the Google Chrome browser__ (see below), making it easy to discover and configure log levels in Chrome. For other browsers (see below also), you need to use their "Storage Inspector" to discover and configure the log levels. Of course, it's also possible to use the Developer Console in any browser to programmatically set log levels via the [Storage API](https://developer.mozilla.org/en-US/docs/Web/API/Storage).
 
 Configuring log levels in the Storage Inspector of any of the Browsers is a simple process of locating the key for the log category of interest (all log category keys have a "`jenkins-instance/logging/categories:`" prefix) and changing it's value to the desired [Level] i.e. `DEBUG`, `LOG`, `INFO`, `WARN`, `ERROR`. See the following sections for specific examples. 
 
