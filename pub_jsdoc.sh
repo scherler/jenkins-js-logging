@@ -10,7 +10,7 @@ git fetch --depth=1 jsdoc gh-pages
 
 git add --all
 git commit -m "jsdoc"
-git merge --no-edit -s ours remotes/jsdoc/gh-pages
+git merge --no-edit -s ours remotes/jsdoc/gh-pages --allow-unrelated-histories
 
 git push jsdoc master:gh-pages
 
